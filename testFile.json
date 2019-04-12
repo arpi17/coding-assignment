@@ -1,0 +1,34 @@
+{
+  "intervals": [
+    {
+      "arrivalTime": 1,
+      "start": 1,
+      "end": 20,
+      "action": "ADDED"
+    },
+    {
+      "arrivalTime": 2,
+      "start": 25,
+      "end": 30,
+      "action": "ADDED"
+    },
+    {
+      "arrivalTime": 3,
+      "start": 40,
+      "end": 50,
+      "action": "ADDED"
+    },
+    {
+      "arrivalTime": 4,
+      "start": 60,
+      "end": 70,
+      "action": "ADDED"
+    },
+    {
+      "arrivalTime": 5,
+      "start": 80,
+      "end": 95,
+      "action": "ADDED"
+    }
+  ]
+}
