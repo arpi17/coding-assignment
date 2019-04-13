@@ -8,7 +8,7 @@
     },
     {
       "arrivalTime": 2,
-      "start": 25,
+      "start": 20,
       "end": 30,
       "action": "ADDED"
     },
@@ -28,6 +28,12 @@
       "arrivalTime": 5,
       "start": 80,
       "end": 95,
+      "action": "ADDED"
+    },
+    {
+      "arrivalTime": 6,
+      "start": 0,
+      "end": 100,
       "action": "ADDED"
     }
   ]

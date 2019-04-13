@@ -17,7 +17,7 @@ class StateElement {
 
 const main = (file, distance) => {
   const intervals = parseFile(file);
-  const state = [];
+  let state = [];
 
   for (let interval of intervals) {
     switch (interval.action) {
@@ -29,7 +29,14 @@ const main = (file, distance) => {
           `Invalid interval action at arrival time: ${interval.arrivalTime}`
         );
     }
-    console.log('Output: ', state);
+
+    const output = state.map(item => `[${[item.start, item.end]}]`);
+    console.log(`
+      -------------------------------------------------------
+
+      ${interval.action}: [${[interval.start, interval.end]}]
+
+      ${output}`);
   }
 };
 
@@ -38,21 +45,19 @@ const parseFile = file => {
   return file.intervals;
 };
 
+// Add interval and to state and merge it
 const addInterval = (target, state) => {
   if (state.length > 0) {
-    const pos = getPosition(target, state);
-    return state;
+    const nextState = addToState(target, state);
+    return nextState;
   }
 
   const { start, end } = target;
-  const firstInterval = {
-    start,
-    end,
-    subintervals: [[start, end]]
-  };
+  const firstInterval = new StateElement(start, end, [[start, end]]);
   return [firstInterval];
 };
 
+// Get the position of the target interval to be inserted into state
 const getPosition = (target, state) => {
   const { start, end } = target;
   const pos = {};
@@ -77,40 +82,53 @@ const getPosition = (target, state) => {
   return pos;
 };
 
+// Add target interval to state at the correct position and modify them accordingly (no merging)
 // FIXME: Don't modify state
-const addToState = (pos, target, state) => {
-  const { start, end } = target;
+const addToState = (target, state) => {
+  const pos = getPosition(target, state);
   const { startIndex, startIsIn, endIndex, endIsIn } = pos;
+  const { start, end } = target;
   let nextState;
 
-  console.log(pos);
-
-  if (startIndex === endIndex) {
-    if (!startIsIn && !endIsIn) {
-      const front = state.slice(0, startIndex);
-      const back = state.slice(startIndex);
-      newInterval = {
-        start,
-        end,
-        subintervals: [[start, end]]
-      };
-      nextState = [...front, newInterval, ...back];
-    } else if (startIsIn && endIsIn) {
+  if (startIndex === endIndex && startIsIn === endIsIn) {
+    if (startIsIn) {
       nextState = [...state];
       nextState[startIndex].subintervals = [
         ...nextState[startIndex].subintervals,
         [start, end]
       ];
+    } else {
+      const front = state.slice(0, startIndex);
+      const back = state.slice(startIndex);
+      const newInterval = new StateElement(start, end, [[start, end]]);
+      nextState = [...front, newInterval, ...back];
     }
+  } else {
+    const front = state.slice(0, startIndex);
+    const back = state.slice(endIndex + 1);
+
+    // Merge subintervals
+    let newSubintervals = [];
+    for (let i = startIndex; i <= Math.min(state.length - 1, endIndex); i++) {
+      newSubintervals = newSubintervals.concat(state[i].subintervals);
+    }
+    newSubintervals = newSubintervals.concat([[start, end]]);
+
+    const newInterval = {
+      start: startIsIn ? state[startIndex].start : start,
+      end: endIsIn ? state[endIndex].end : end,
+      subintervals: newSubintervals
+    };
+    nextState = [...front, newInterval, ...back];
   }
   return nextState;
 };
 
-// main(f, d);
+main(f, d);
 
 testTarget = {
-  start: 21,
-  end: 29
+  start: 0,
+  end: 2
 };
 
 testState = [
@@ -119,12 +137,12 @@ testState = [
   new StateElement(35, 50, [[35, 50]])
 ];
 
-console.log(
-  JSON.stringify(
-    addToState(getPosition(testTarget, testState), testTarget, testState),
-    null,
-    2
-  )
-);
+// console.log(
+//   JSON.stringify(
+//     addToState(getPosition(testTarget, testState), testTarget, testState),
+//     null,
+//     2
+//   )
+// );
 
 // console.log(JSON.stringify(testState, null, 2));
