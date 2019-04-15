@@ -24,6 +24,9 @@ const main = (file, distance) => {
       case 'ADDED':
         state = addInterval(interval, state);
         break;
+      case 'REMOVED':
+        state = removeInterval(interval, state);
+        break;
       default:
         throw new Error(
           `Invalid interval action at arrival time: ${interval.arrivalTime}`
@@ -48,7 +51,7 @@ const parseFile = file => {
 // Add interval and to state and merge it
 const addInterval = (target, state) => {
   if (state.length > 0) {
-    const nextState = addToState(target, state);
+    const nextState = insertToState(target, state);
     return nextState;
   }
 
@@ -63,28 +66,28 @@ const getPosition = (target, state) => {
   const pos = {};
   let i = state.length;
 
+  // Find the position of the end
+  while (i > 0 && end <= state[i - 1].end) {
+    i--;
+  }
+  pos.endIndex = i;
+  pos.endIsIn =
+    i === state.length ? false : end >= state[i].start ? true : false;
+
   // Find the position of the start
   while (i > 0 && start <= state[i - 1].end) {
     i--;
   }
   pos.startIndex = i;
   pos.startIsIn =
-    i === state.length ? false : start < state[i].start ? false : true;
-
-  // Find the position of the end
-  while (i < state.length && end > state[i].end) {
-    i++;
-  }
-  pos.endIndex = i;
-  pos.endIsIn =
-    i === state.length ? false : end >= state[i].start ? true : false;
+    i === state.length ? false : start >= state[i].start ? true : false;
 
   return pos;
 };
 
 // Add target interval to state at the correct position and modify them accordingly (no merging)
 // FIXME: Don't modify state
-const addToState = (target, state) => {
+const insertToState = (target, state) => {
   const pos = getPosition(target, state);
   const { startIndex, startIsIn, endIndex, endIsIn } = pos;
   const { start, end } = target;
@@ -124,25 +127,35 @@ const addToState = (target, state) => {
   return nextState;
 };
 
-main(f, d);
+// FIXME: Don't modify state and clean this up
+const removeInterval = (target, state) => {
+  let nextState = [...state];
+  const { start, end } = target;
+  const containsTargetInterval = subinterval =>
+    subinterval[0] === start && subinterval[1] === end;
 
-testTarget = {
-  start: 0,
-  end: 2
+  const intervalIndex = state.findIndex(interval =>
+    interval.subintervals.some(containsTargetInterval)
+  );
+
+  if (intervalIndex > -1) {
+    const subintervals = nextState[intervalIndex].subintervals.filter(
+      subinterval => !(subinterval[0] === start && subinterval[1] === end)
+    );
+
+    if (subintervals.length === 0) {
+      return nextState.filter((interval, i) => i !== intervalIndex);
+    }
+
+    return nextState;
+  } else {
+    throw new Error(
+      `The interval [${[
+        start,
+        end
+      ]}] is either already removed or has never been added at the first place`
+    );
+  }
 };
 
-testState = [
-  new StateElement(0, 9, [[0, 1], [0, 9]]),
-  new StateElement(20, 30, [[20, 30]]),
-  new StateElement(35, 50, [[35, 50]])
-];
-
-// console.log(
-//   JSON.stringify(
-//     addToState(getPosition(testTarget, testState), testTarget, testState),
-//     null,
-//     2
-//   )
-// );
-
-// console.log(JSON.stringify(testState, null, 2));
+// main(f, d);
