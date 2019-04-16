@@ -1,0 +1,94 @@
+{
+  "intervals": [
+    {
+      "arrivalTime": 1,
+      "start": 1,
+      "end": 7,
+      "action": "ADDED"
+    },
+    {
+      "arrivalTime": 2,
+      "start": 20,
+      "end": 24,
+      "action": "ADDED"
+    },
+    {
+      "arrivalTime": 3,
+      "start": 6,
+      "end": 13,
+      "action": "ADDED"
+    },
+    {
+      "arrivalTime": 4,
+      "start": 16,
+      "end": 17,
+      "action": "ADDED"
+    },
+    {
+      "arrivalTime": 5,
+      "start": 0,
+      "end": 27,
+      "action": "ADDED"
+    },
+    {
+      "arrivalTime": 6,
+      "start": 1,
+      "end": 7,
+      "action": "REMOVED"
+    },
+    {
+      "arrivalTime": 7,
+      "start": 16,
+      "end": 17,
+      "action": "REMOVED"
+    },
+    {
+      "arrivalTime": 8,
+      "start": 0,
+      "end": 27,
+      "action": "REMOVED"
+    },
+    {
+      "arrivalTime": 9,
+      "start": 10,
+      "end": 13,
+      "action": "DELETED"
+    },
+    {
+      "arrivalTime": 10,
+      "start": 22,
+      "end": 23,
+      "action": "DELETED"
+    },
+    {
+      "arrivalTime": 11,
+      "start": 6,
+      "end": 10,
+      "action": "REMOVED"
+    },
+    {
+      "arrivalTime": 12,
+      "start": 0,
+      "end": 17,
+      "action": "ADDED"
+    },
+    {
+      "arrivalTime": 13,
+      "start": 10,
+      "end": 16,
+      "action": "ADDED"
+    },
+    {
+      "arrivalTime": 14,
+      "start": 12,
+      "end": 16,
+      "action": "DELETED"
+    },
+    {
+      "arrivalTime": 15,
+      "start": 0,
+      "end": 17,
+      "action": "REMOVED"
+    }
+  ]
+}
