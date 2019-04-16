@@ -1,10 +1,10 @@
 # Coding assignment
 
-My final solution is written in JavaScript and can be found at the `index.js` file. Some test files in JSON format are also included.
+My final solution is written in JavaScript and can be found in the `index.js` file. Some test files in JSON format are also included.
 
 ### Usage
 
-The simplest way to run the code is by using the _Node.js_ environment. Open up a terminal at the root of the folder and type `node index`. The output will appear on the console.
+The simplest way to run the code is by using the [Node.js](https://nodejs.org/en/) environment. Open up a terminal at the root of the folder and type `node index`. The output will appear on the console.
 
 All the necessary funcionality is included in the `main()` function. Its parameters - the _input file_ and the _merge distance_ - can be changed at the top of the `index.js` file.
 
@@ -27,11 +27,11 @@ When an interval `[a, b]` is signed for deletion the `deleteFromState()` first f
 ##### Caveats
 
 - Only _subsets_ of the intervals in the current `state` can be deleted. If an interval-to-be-deleted intersects with another one in the `state`, but is not fully contained in it, no deletion will take place
-- If parts of an interval is deleted later the _original_ interval cannot be removed
-- Upon deletion the remaining parts of an interval will appear as distinct elements in the `state` however the merge distance can be such that the action won't have any visible effects in the output
+- If parts of an interval is deleted later the _original_ interval cannot be removed as a whole
+- Upon deletion the remaining parts of an interval will appear as distinct elements in the `state` however the _merge distance_ can be such that the action won't have any visible effects in the output
 
 ### On efficiency
 
-This method computes the output in every step. Although I chose this approach since for smaller input sizes it was the easiest to implement it can get slow as the `state` grows.
+This method computes the output in every step. I chose this approach since it was the easiest to implement however it can get slow as the `state` grows.
 
 A better way would be to store the output separately and only _update_ the relevant parts of it when adding, removing or deleting an interval.
